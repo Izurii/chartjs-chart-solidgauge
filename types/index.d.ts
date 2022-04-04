@@ -1,4 +1,6 @@
 import {
+	Scriptable,
+	Color,
 	ChartType,
 	ChartDataset,
 	Plugin,
@@ -13,15 +15,15 @@ declare module "chart.js" {
 			chartOptions: {
 				cutout: number | string;
 				text: string;
-				textColor: Indexable<Color> | Scriptable<Color>;
-				textFont: Indexable<Font> | Scriptable<Font>;
+				textColor: string;
+				textFont: string;
 				subtext: string;
-				subtextColor: Indexable<Color> | Scriptable<Color>;
-				subtextFont: Indexable<Font> | Scriptable<Font>;
+				subtextColor: string;
+				subtextFont: string;
 				min: number | string;
 				max: number | string;
-				minMaxFont: Indexable<Font> | Scriptable<Font>;
-				minMaxColor: Indexable<Color> | Scriptable<Color>;
+				minMaxFont: string;
+				minMaxColor: string;
 			} & Omit<
 				DoughnutControllerChartOptions,
 				"circumference" | "rotation"

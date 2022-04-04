@@ -5,7 +5,6 @@ import {
 	ArcOptions,
 	ArcProps,
 	Chart,
-	ChartOptions,
 	DoughnutController,
 	Element,
 	LayoutItem,
@@ -111,7 +110,7 @@ export default class SolidGauge extends DoughnutController {
 				subtextY -= difference;
 			}
 
-			ctx.fillStyle = textColor;
+			ctx.fillStyle = textColor || "#000";
 			ctx.fillText(text, textX, textY);
 			ctx.restore();
 
@@ -125,7 +124,7 @@ export default class SolidGauge extends DoughnutController {
 					canvasWidthHalf - subtextDimensions.width / 2
 				);
 
-				ctx.fillStyle = subtextColor;
+				ctx.fillStyle = subtextColor || "#000";
 				ctx.fillText(subtext, subtextX, subtextY);
 				ctx.restore();
 			}
@@ -195,9 +194,7 @@ export default class SolidGauge extends DoughnutController {
 				maxDimensions.width / 2
 		);
 
-		if (minMaxColor) {
-			ctx.fillStyle = minMaxColor;
-		}
+		ctx.fillStyle = minMaxColor || "#000";
 
 		ctx.fillText(minString, minX, minMaxY);
 		ctx.fillText(maxString, maxX, minMaxY);
@@ -207,15 +204,5 @@ export default class SolidGauge extends DoughnutController {
 }
 
 SolidGauge.id = "solidgauge";
-SolidGauge.defaults = {
-	...DoughnutController.defaults,
-	maintainAspectRatio: false,
-	circumference: 180,
-	rotation: -90,
-	cutout: "70%",
-	textColor: "#000",
-	subtextColor: "#000",
-	minMaxColor: "#000",
-} as ChartOptions<"solidgauge">;
 
 Chart.register(SolidGauge);
