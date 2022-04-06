@@ -5,6 +5,7 @@ import {
 	ArcOptions,
 	ArcProps,
 	Chart,
+	ChartOptions,
 	DoughnutController,
 	Element,
 	LayoutItem,
@@ -204,5 +205,15 @@ export default class SolidGauge extends DoughnutController {
 }
 
 SolidGauge.id = "solidgauge";
+SolidGauge.defaults = {
+	...DoughnutController.defaults,
+	maintainAspectRatio: false,
+	circumference: 180,
+	rotation: -90,
+	cutout: "70%",
+	textColor: "#000",
+	subtextColor: "#000",
+	minMaxColor: "#000",
+} as ChartOptions<"solidgauge">;
 
 Chart.register(SolidGauge);
