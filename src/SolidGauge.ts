@@ -14,14 +14,21 @@ import {
 import { AnyObject } from "chart.js/types/basic";
 
 export default class SolidGauge extends DoughnutController {
-	private _outerArcWidth: number = 0;
-	private _innerArcWidth: number = 0;
+	private _canvasWidth = 0;
+	private _canvasWidthHalf = 0;
+	private _canvasHeight = 0;
+	private _canvasHeightHalf = 0;
 
-	private _arcThickness: number = 0;
-	private _arcThicknessHalf: number = 0;
-	private _arcY: number = 0;
+	private _outerArcWidth = 0;
+	private _innerArcWidth = 0;
 
-	private _distanceFromCanvasEdgeX: number = 0;
+	private _arcThickness = 0;
+	private _arcThicknessHalf = 0;
+	private _arcY = 0;
+
+	private _distanceFromCanvasEdgeX = 0;
+
+	private _browserZoom = 0;
 
 	private readonly _box = {
 		id: "solidgauge-box",
@@ -42,6 +49,8 @@ export default class SolidGauge extends DoughnutController {
 	} as LayoutItem;
 
 	draw(): void {
+		this._calculateDimensions();
+
 		const chart = this.chart as Chart<"solidgauge">;
 
 		const {
@@ -56,29 +65,6 @@ export default class SolidGauge extends DoughnutController {
 		} = chart.options;
 
 		const { ctx } = chart;
-
-		const { height: canvasHeight, width: canvasWidth } = ctx.canvas;
-		const canvasWidthHalf = canvasWidth / 2;
-
-		// @ts-ignore
-		const datasetMeta: ChartMeta<
-			Element<ArcElement, ArcOptions & AnyObject> & ArcProps,
-			Element<ArcElement, ArcOptions & AnyObject> & ArcProps,
-			"solidgauge"
-		> = chart.getDatasetMeta(0);
-
-		const { innerRadius, outerRadius, y: arcY } = datasetMeta.data[0];
-
-		this._arcY = arcY;
-		this._outerArcWidth = Math.round(this.outerRadius * 2);
-		this._innerArcWidth = Math.round(this.innerRadius * 2);
-
-		this._distanceFromCanvasEdgeX = Math.round(
-			(canvasWidth - this._outerArcWidth) / 2
-		);
-
-		this._arcThickness = Math.round(outerRadius - innerRadius);
-		this._arcThicknessHalf = Math.round(this._arcThickness / 2);
 
 		ctx.restore();
 
@@ -98,14 +84,14 @@ export default class SolidGauge extends DoughnutController {
 				textDimensions.actualBoundingBoxDescent;
 
 			const textX = Math.round(
-				canvasWidthHalf - textDimensions.width / 2
+				this._canvasWidthHalf - textDimensions.width / 2
 			);
-			let textY = Math.round(arcY - textHeight);
+			let textY = Math.round(this._arcY - textHeight);
 
 			let subtextY = textY + textHeight;
 
-			if (subtextY > canvasHeight) {
-				const difference = subtextY - canvasHeight;
+			if (subtextY > this._canvasHeight) {
+				const difference = subtextY - this._canvasHeight;
 
 				textY -= difference;
 				subtextY -= difference;
@@ -122,7 +108,7 @@ export default class SolidGauge extends DoughnutController {
 
 				const subtextDimensions = ctx.measureText(subtext);
 				const subtextX = Math.round(
-					canvasWidthHalf - subtextDimensions.width / 2
+					this._canvasWidthHalf - subtextDimensions.width / 2
 				);
 
 				ctx.fillStyle = subtextColor || "#000";
@@ -158,7 +144,6 @@ export default class SolidGauge extends DoughnutController {
 		const chart = this.chart as Chart<"solidgauge">;
 		const { ctx } = chart;
 		const { min, max, minMaxFont, minMaxColor } = chart.options;
-		const { width: canvasWidth } = ctx.canvas;
 
 		// MIN~MAX
 
@@ -189,7 +174,7 @@ export default class SolidGauge extends DoughnutController {
 
 		const maxDimensions = ctx.measureText(maxString);
 		const maxX = Math.round(
-			canvasWidth -
+			this._canvasWidth -
 				this._distanceFromCanvasEdgeX -
 				this._arcThicknessHalf -
 				maxDimensions.width / 2
@@ -201,6 +186,40 @@ export default class SolidGauge extends DoughnutController {
 		ctx.fillText(maxString, maxX, minMaxY);
 
 		return minOrMaxHeight;
+	}
+
+	private _calculateDimensions(): void {
+		this._browserZoom = window.devicePixelRatio || 1;
+
+		const chart = this.chart as Chart<"solidgauge">;
+		const { ctx } = chart;
+
+		const { height: canvasHeightReal, width: canvasWidthReal } = ctx.canvas;
+
+		this._canvasWidth = Math.round(canvasWidthReal / this._browserZoom);
+		this._canvasWidthHalf = Math.round(this._canvasWidth / 2);
+		this._canvasHeight = Math.round(canvasHeightReal / this._browserZoom);
+		this._canvasHeightHalf = Math.round(this._canvasHeight / 2);
+
+		// @ts-ignore
+		const datasetMeta: ChartMeta<
+			Element<ArcElement, ArcOptions & AnyObject> & ArcProps,
+			Element<ArcElement, ArcOptions & AnyObject> & ArcProps,
+			"solidgauge"
+		> = chart.getDatasetMeta(0);
+
+		const { innerRadius, outerRadius, y: arcY } = datasetMeta.data[0];
+
+		this._arcY = arcY;
+		this._outerArcWidth = Math.round(this.outerRadius * 2);
+		this._innerArcWidth = Math.round(this.innerRadius * 2);
+
+		this._distanceFromCanvasEdgeX = Math.round(
+			(this._canvasWidth - this._outerArcWidth) / 2
+		);
+
+		this._arcThickness = Math.round(outerRadius - innerRadius);
+		this._arcThicknessHalf = Math.round(this._arcThickness / 2);
 	}
 }
 
