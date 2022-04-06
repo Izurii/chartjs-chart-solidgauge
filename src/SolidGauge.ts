@@ -17,6 +17,7 @@ export default class SolidGauge extends DoughnutController {
 	private _canvasWidth = 0;
 	private _canvasWidthHalf = 0;
 	private _canvasHeight = 0;
+	// @ts-ignore
 	private _canvasHeightHalf = 0;
 
 	private _outerArcWidth = 0;
