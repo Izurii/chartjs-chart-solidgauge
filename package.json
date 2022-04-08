@@ -8,11 +8,17 @@
 	"license": "GPL-3.0-or-later",
 	"scripts": {
 		"build": "yarn run clean && yarn run tsc",
-		"clean": "rm -rf dist"
+		"clean": "rm -rf dist",
+		"docs": "yarn run build && vuepress build docs --no-cache",
+		"docs:dev": "yarn run build && vuepress dev docs --no-cache"
 	},
 	"devDependencies": {
 		"@types/chart.js": "^2.9.36",
-		"typescript": "^4.6.3"
+		"typescript": "^4.6.3",
+		"vuepress": "^1.9.7",
+		"vuepress-plugin-flexsearch": "^0.3.0",
+		"vuepress-plugin-redirect": "^1.2.5",
+		"vuepress-theme-chartjs": "^0.2.0"
 	},
 	"dependencies": {
 		"chart.js": "^3.7.1"

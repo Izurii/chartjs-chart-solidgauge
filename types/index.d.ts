@@ -7,9 +7,9 @@ import {
 	Element,
 	VisualElement,
 	DoughnutController,
-} from "chart.js";
+} from 'chart.js';
 
-declare module "chart.js" {
+declare module 'chart.js' {
 	interface ChartTypeRegistry {
 		solidgauge: {
 			chartOptions: {
@@ -24,11 +24,8 @@ declare module "chart.js" {
 				max: number | string;
 				minMaxFont: string;
 				minMaxColor: string;
-			} & Omit<
-				DoughnutControllerChartOptions,
-				"circumference" | "rotation"
-			>;
-		} & Omit<ChartTypeRegistry["doughnut"], "chartOptions">;
+			} & Omit<DoughnutControllerChartOptions, 'circumference' | 'rotation'>;
+		} & Omit<ChartTypeRegistry['doughnut'], 'chartOptions'>;
 	}
 }
 
