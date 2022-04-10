@@ -12,6 +12,5 @@ jobs:
               env:
                   ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                   TARGET_REPO: Izurii/chartjs-chart-solidgauge
-                  TARGET_BRANCH: master
                   BUILD_SCRIPT: yarn && yarn run docs
                   BUILD_DIR: docs/.vuepress/dist
