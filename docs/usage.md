@@ -4,6 +4,7 @@
 const config = {
 	type: 'solidgauge',
 	options: {
+		text: 'teste',
 		min: '0%',
 		max: '100%',
 	},

@@ -17,8 +17,8 @@ const config = {
 	type: 'solidgauge',
 	data: data,
 	options: {
-		min: '0',
-		max: '100',
+		min: '0%',
+		max: '100%',
 		text: '20%',
 		subtext: '323',
 	},

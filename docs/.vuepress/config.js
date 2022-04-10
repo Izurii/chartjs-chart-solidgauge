@@ -4,8 +4,7 @@ module.exports = {
 	title: 'chartjs-chart-solidgauge',
 	description: 'Chart.js module for creating solid gauge charts',
 	theme: 'chartjs',
-	base: '',
-	dest: path.resolve(__dirname, '../../dist/docs'),
+	base: '/chartjs-chart-solidgauge/',
 	head: [
 		['link', { rel: 'icon', href: '/favicon.ico' }],
 	],
