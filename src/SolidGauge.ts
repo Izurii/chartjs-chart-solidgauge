@@ -11,7 +11,9 @@ import {
 	LayoutItem,
 	layouts,
 } from 'chart.js';
-import { AnyObject } from 'chart.js/types/basic';
+import type { AnyObject } from 'chart.js/types/basic';
+import { _DeepPartialObject } from 'chart.js/types/utils';
+import type { FontObject } from '../types';
 
 export default class SolidGauge extends DoughnutController {
 	private _canvasWidth = 0;
@@ -55,7 +57,7 @@ export default class SolidGauge extends DoughnutController {
 
 		const chart = this.chart as Chart<'solidgauge'>;
 
-		const { text, textFont, textColor, subtext, subtextFont, subtextColor, min, max } = chart.options;
+		const { text, textFont, subtext, subtextFont, min, max } = chart.options;
 
 		const { ctx } = chart;
 
@@ -69,7 +71,10 @@ export default class SolidGauge extends DoughnutController {
 		if (text) {
 			const textFontSize = (this._innerArcWidth / 70).toFixed(2);
 
-			ctx.font = textFont || `bold ${textFontSize}em sans-serif`;
+			ctx.font = this._processFontObject(textFont || {}, {
+				fontSize: `${textFontSize}em`,
+				fontWeight: 'bold',
+			});
 
 			const textDimensions = ctx.measureText(text);
 			const textHeight = textDimensions.actualBoundingBoxAscent + textDimensions.actualBoundingBoxDescent;
@@ -86,18 +91,21 @@ export default class SolidGauge extends DoughnutController {
 				subtextY -= difference;
 			}
 
-			ctx.fillStyle = textColor || '#000';
+			ctx.fillStyle = this._getFontColor(textFont || {});
 			ctx.fillText(text, textX, textY);
 			ctx.restore();
 
 			if (subtext) {
 				const subtextFontSize = (Number(textFontSize) / 2).toFixed(2);
-				ctx.font = subtextFont || `bold ${subtextFontSize}em sans-serif`;
+				ctx.font = this._processFontObject(subtextFont || {}, {
+					fontSize: `${subtextFontSize}em`,
+					fontWeight: 'bold',
+				});
 
 				const subtextDimensions = ctx.measureText(subtext);
 				const subtextX = Math.round(this._canvasWidthHalf - subtextDimensions.width / 2);
 
-				ctx.fillStyle = subtextColor || '#000';
+				ctx.fillStyle = this._getFontColor(subtextFont || {});
 				ctx.fillText(subtext, subtextX, subtextY);
 				ctx.restore();
 			}
@@ -127,7 +135,7 @@ export default class SolidGauge extends DoughnutController {
 	private _drawMinMax(): number {
 		const chart = this.chart as Chart<'solidgauge'>;
 		const { ctx } = chart;
-		const { min, max, minMaxFont, minMaxColor } = chart.options;
+		const { min, max, minMaxFont } = chart.options;
 
 		// MIN~MAX
 
@@ -138,7 +146,9 @@ export default class SolidGauge extends DoughnutController {
 		const maxString = !maxIsUndefined ? `${max}` : '';
 
 		const minMaxFontSize = (this._arcThickness / 70).toFixed(2);
-		ctx.font = minMaxFont || `normal ${minMaxFontSize}em sans-serif`;
+		ctx.font = this._processFontObject(minMaxFont || {}, {
+			fontSize: `${minMaxFontSize}em`,
+		});
 
 		const minOrMaxDimensions = ctx.measureText(minString || maxString);
 		const minOrMaxHeight = minOrMaxDimensions.actualBoundingBoxAscent + minOrMaxDimensions.actualBoundingBoxDescent;
@@ -153,7 +163,7 @@ export default class SolidGauge extends DoughnutController {
 			this._canvasWidth - this._distanceFromCanvasEdgeX - this._arcThicknessHalf - maxDimensions.width / 2
 		);
 
-		ctx.fillStyle = minMaxColor || '#000';
+		ctx.fillStyle = this._getFontColor(minMaxFont || {});
 
 		ctx.fillText(minString, minX, minMaxY);
 		ctx.fillText(maxString, maxX, minMaxY);
@@ -192,18 +202,46 @@ export default class SolidGauge extends DoughnutController {
 		this._arcThickness = Math.round(outerRadius - innerRadius);
 		this._arcThicknessHalf = Math.round(this._arcThickness / 2);
 	}
+
+	private _processFontObject(
+		font: _DeepPartialObject<FontObject>,
+		options?: _DeepPartialObject<Exclude<FontObject, string>>
+	): string {
+		if (typeof font === 'string') {
+			return font;
+		}
+		return `${font.fontStyle || options?.fontStyle || 'normal'} ${
+			font.fontVariant || options?.fontVariant || 'normal'
+		} ${font.fontWeight || options?.fontWeight || 'normal'} ${font.fontSize || options?.fontSize || '1em'} ${
+			font.fontFamily || options?.fontFamily || 'sans-serif'
+		}`;
+	}
+
+	private _getFontColor(font: _DeepPartialObject<FontObject>, defaultColor?: string): string {
+		if (typeof font === 'string') {
+			return defaultColor || '#000';
+		}
+		return font.fontColor || defaultColor || '#000';
+	}
 }
 
 SolidGauge.id = 'solidgauge';
 SolidGauge.defaults = {
 	...DoughnutController.defaults,
 	maintainAspectRatio: false,
+	backgroundColor: ['#6CA6F0', 'transparent'],
 	circumference: 180,
 	rotation: -90,
 	cutout: '70%',
-	textColor: '#000',
-	subtextColor: '#000',
-	minMaxColor: '#000',
+	textFont: {
+		fontColor: '#000',
+	},
+	subtextFont: {
+		fontColor: '#000',
+	},
+	minMaxFont: {
+		fontColor: '#000',
+	},
 	plugins: {
 		tooltip: {
 			enabled: false,

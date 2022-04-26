@@ -9,21 +9,29 @@ import {
 	DoughnutController,
 } from 'chart.js';
 
+export type FontObject =
+	| {
+			fontStyle: 'normal' | 'italic' | 'oblique';
+			fontVariant: 'normal' | 'small-caps';
+			fontWeight: 'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+			fontSize: number | string;
+			fontFamily: string;
+			fontColor: string;
+	  }
+	| string;
+
 declare module 'chart.js' {
 	interface ChartTypeRegistry {
 		solidgauge: {
 			chartOptions: {
 				cutout: number | string;
 				text: string;
-				textColor: string;
-				textFont: string;
+				textFont: FontObject;
 				subtext: string;
-				subtextColor: string;
-				subtextFont: string;
+				subtextFont: FontObject;
 				min: number | string;
 				max: number | string;
-				minMaxFont: string;
-				minMaxColor: string;
+				minMaxFont: FontObject;
 			} & Omit<DoughnutControllerChartOptions, 'circumference' | 'rotation'>;
 		} & Omit<ChartTypeRegistry['doughnut'], 'chartOptions'>;
 	}
