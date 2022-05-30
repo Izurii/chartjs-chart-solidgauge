@@ -1,0 +1,36 @@
+{
+	"extends": [
+		"airbnb",
+		"airbnb-typescript",
+		"prettier"
+	],
+	"ignorePatterns": [
+		".eslintrc.json"
+	],
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"plugins": [
+		"unused-imports"
+	],
+	"rules": {
+		"import/order": [
+			"error",
+			{
+				"groups": [
+					//
+					"builtin",
+					"external",
+					"internal",
+					"parent",
+					"sibling",
+					"index"
+				],
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				}
+			}
+		]
+	}
+}

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/lines-between-class-members */
 /* eslint-disable no-underscore-dangle */
 import {
 	ArcElement,
@@ -17,16 +16,22 @@ import type { FontObject } from '../types';
 
 export default class SolidGauge extends DoughnutController {
 	private _canvasWidth = 0;
+
 	private _canvasWidthHalf = 0;
+
 	private _canvasHeight = 0;
+
 	// @ts-ignore
 	private _canvasHeightHalf = 0;
 
 	private _outerArcWidth = 0;
+
 	private _innerArcWidth = 0;
 
 	private _arcThickness = 0;
+
 	private _arcThicknessHalf = 0;
+
 	private _arcY = 0;
 
 	private _distanceFromCanvasEdgeX = 0;
@@ -145,7 +150,7 @@ export default class SolidGauge extends DoughnutController {
 		const minString = !minIsUndefined ? `${min}` : '';
 		const maxString = !maxIsUndefined ? `${max}` : '';
 
-		const minMaxFontSize = (this._arcThickness / 70).toFixed(2);
+		const minMaxFontSize = (this._arcThickness / 60).toFixed(2);
 		ctx.font = this._processFontObject(minMaxFont || {}, {
 			fontSize: `${minMaxFontSize}em`,
 		});
@@ -210,9 +215,16 @@ export default class SolidGauge extends DoughnutController {
 		if (typeof font === 'string') {
 			return font;
 		}
+
+		let fontSize = options?.fontSize || '1em';
+		if (font.fontSize) {
+			fontSize = (parseFloat(`${font.fontSize}`) * (this._innerArcWidth / 150) * this._browserZoom).toFixed(2);
+			fontSize = `${fontSize}${String(font.fontSize).replace(/\d\.+/g, '')}`;
+		}
+
 		return `${font.fontStyle || options?.fontStyle || 'normal'} ${
 			font.fontVariant || options?.fontVariant || 'normal'
-		} ${font.fontWeight || options?.fontWeight || 'normal'} ${font.fontSize || options?.fontSize || '1em'} ${
+		} ${font.fontWeight || options?.fontWeight || 'normal'} ${fontSize} ${
 			font.fontFamily || options?.fontFamily || 'sans-serif'
 		}`;
 	}
