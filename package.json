@@ -1,6 +1,6 @@
 {
 	"name": "chartjs-chart-solidgauge",
-	"version": "1.0.5",
+	"version": "1.0.7",
 	"main": "dist/SolidGauge.js",
 	"types": "types/index.d.ts",
 	"repository": "https://github.com/Izurii/chartjs-chart-solidgauge",
@@ -14,6 +14,12 @@
 	},
 	"devDependencies": {
 		"@types/chart.js": "^2.9.36",
+		"eslint": "^8.14.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-airbnb-typescript": "^17.0.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"prettier": "^2.6.2",
 		"typescript": "^4.6.3",
 		"vuepress": "^1.9.7",
 		"vuepress-plugin-flexsearch": "^0.3.0",
