@@ -1,6 +1,6 @@
 {
 	"name": "chartjs-chart-solidgauge",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"main": "dist/SolidGauge.js",
 	"types": "types/index.d.ts",
 	"repository": "https://github.com/Izurii/chartjs-chart-solidgauge",
