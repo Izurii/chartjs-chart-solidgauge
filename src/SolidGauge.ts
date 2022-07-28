@@ -131,6 +131,7 @@ export default class SolidGauge extends DoughnutController {
 				}
 			} else {
 				layouts.addBox(this.chart, { ...this._box, height: newHeight });
+				chart.update();
 			}
 		}
 
